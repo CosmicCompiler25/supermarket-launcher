@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Supermarket Search Launcher</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 20px;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+    h2 {
+      margin-top: 40px;
+      font-size: 28px;
+    }
+    .search-row {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    .search-inline {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      font-size: 18px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+    }
+    .suggestions {
+      display: none;
+      border: 1px solid #ccc;
+      max-height: 200px;
+      overflow-y: auto;
+      background: white;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+    }
+    .suggestions div {
+      padding: 8px;
+      cursor: pointer;
+    }
+    .suggestions div:hover {
+      background-color: #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Tesco</h2>
+  <div class="search-row">
+    <div class="search-inline">
+      <input type="text" id="tescoInput" oninput="showSuggestions(this, 'tesco')" autocomplete="off" placeholder="Enter product name">
+      <button onclick="search('tesco')">Search</button>
+    </div>
+    <div id="tescoSuggestions" class="suggestions"></div>
+  </div>
+
+  <h2>Asda</h2>
+  <div class="search-row">
+    <div class="search-inline">
+      <input type="text" id="asdaInput" oninput="showSuggestions(this, 'asda')" autocomplete="off" placeholder="Enter product name">
+      <button onclick="search('asda')">Search</button>
+    </div>
+    <div id="asdaSuggestions" class="suggestions"></div>
+  </div>
+
+  <h2>Sainsbury’s</h2>
+  <div class="search-row">
+    <div class="search-inline">
+      <input type="text" id="sainsburysInput" oninput="showSuggestions(this, 'sainsburys')" autocomplete="off" placeholder="Enter product name">
+      <button onclick="search('sainsburys')">Search</button>
+    </div>
+    <div id="sainsburysSuggestions" class="suggestions"></div>
+  </div>
+
+  <h2>Morrisons</h2>
+  <div class="search-row">
+    <div class="search-inline">
+      <input type="text" id="morrisonsInput" oninput="showSuggestions(this, 'morrisons')" autocomplete="off" placeholder="Enter product name">
+      <button onclick="search('morrisons')">Search</button>
+    </div>
+    <div id="morrisonsSuggestions" class="suggestions"></div>
+  </div>
+
+  <script>
+    const productList = [
+      "aa batteries", "aaa batteries", "alpro", "andrex own", "apple juice", "apple pie",
+      "baguette", "baked beans", "banana", "bin bags", "biscuit", "biscuits", "bog roll",
+      "bounty", "box tissue", "bread", "butter", "c&o crisps", "camomile tea", "cheese",
+      "cheese balls", "cheese puffs", "chicken crisps", "chicken nuggets", "chips", "choc",
+      "choc bar", "choc bars", "choc peanuts", "cloths", "cod", "coffee", "coffee sachets",
+      "coke zero", "cola", "colgate max", "cordial", "crisps", "croissant", "dash", "deoderant",
+      "diet coke", "discos", "domestos", "double decker", "drain unblocker", "egg", "eggs",
+      "fairy liquid", "falafel", "fanta lemon", "fizzy drinks", "fizzy water", "flash dust",
+      "flash spray", "foil", "frozen veg", "fruit drinks", "fruit juice", "fruit splash",
+      "gatorade", "gel", "grated cheese", "hand wash", "handwash", "hg spray", "hula hoops",
+      "ibuprofen", "ice cream", "ice lollies", "jaffa cakes", "kenco sachets", "ketchup",
+      "kit kat", "kit roll", "kit towel", "kitchen roll", "kitchen towel", "kp peanuts",
+      "lasagne", "lenor", "light bulb", "lime cordial", "lion bar", "magnum", "mars", "mash",
+      "max crisps", "mayo", "micellar cleansing water", "milk", "milky way", "mini cheddars",
+      "mini rolls", "mint ice cream", "mustard", "nexium", "nik naks", "nuggets", "oasis",
+      "oil spray", "oj", "orange cordial", "orange sport", "paper plates", "paracetamol",
+      "peanuts", "pepsi", "persil", "persil colour", "pizza", "plastic cups", "porridge",
+      "pot noodle", "pringles", "pro plus", "quavers", "rescue pastilles", "ribena",
+      "rs crisps", "s&v crisps", "salad", "San Pellegrino", "sandwich", "shampoo",
+      "shine spray", "shower gel", "small choc bars", "small chocs", "small cookies",
+      "small tissues", "snickers", "soda water", "soup", "sports drink", "star bar", "tea",
+      "tesco cola", "tesco fizzy drinks", "tissues", "toilet roll", "toilet tissue",
+      "toothbrush", "toothpaste", "trail mix", "twiglets", "twix", "veg burger", "veg pie",
+      "viakal", "volvic", "walnuts", "water 2ltr", "water 500ml", "wispa", "wispa gold",
+      "wotsits", "yoghurt"
+    ];
+
+    function showSuggestions(input, store) {
+      const query = input.value.toLowerCase();
+      const suggestionBox = document.getElementById(store + "Suggestions");
+      suggestionBox.innerHTML = "";
+
+      if (query.length === 0) {
+        suggestionBox.style.display = "none";
+        return;
+      }
+
+      const matches = productList.filter(item => item.toLowerCase().includes(query));
+      if (matches.length === 0) {
+        suggestionBox.style.display = "none";
+        return;
+      }
+
+      suggestionBox.style.display = "block";
+      matches.slice(0, 10).forEach(match => {
+        const div = document.createElement("div");
+        div.textContent = match;
+        div.onclick = () => {
+          input.value = match;
+          suggestionBox.innerHTML = "";
+          suggestionBox.style.display = "none";
+        };
+        suggestionBox.appendChild(div);
+      });
+    }
+
+    function search(store) {
+      const inputId = store + "Input";
+      const query = document.getElementById(inputId).value.trim().toLowerCase();
+
+      const urls = {
+        tesco: "https://www.tesco.com/groceries/en-GB/search?query=",
+        asda: "https://groceries.asda.com/search/",
+        sainsburys: "https://www.sainsburys.co.uk/gol-ui/SearchResults/",
+        morrisons: "https://groceries.morrisons.com/search?q="
+      };
+
+      if (query) {
+        window.open(urls[store] + encodeURIComponent(query), "_blank");
+      }
+    }
+  </script>
+
+</body>
+</html>
