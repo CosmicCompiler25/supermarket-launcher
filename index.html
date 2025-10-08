@@ -158,10 +158,14 @@
         const div = document.createElement("div");
         div.textContent = match;
         div.onclick = () => {
-          input.value = match;
-          suggestionBox.innerHTML = "";
-          suggestionBox.style.display = "none";
-        };
+  input.value = match;
+  suggestionBox.innerHTML = "";
+  suggestionBox.style.display = "none";
+  input.focus();
+  input.scrollIntoView({ behavior: "smooth", block: "center" });
+  search(store); // Auto-trigger search
+};
+
         suggestionBox.appendChild(div);
       });
     }
