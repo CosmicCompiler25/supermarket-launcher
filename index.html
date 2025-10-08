@@ -62,7 +62,10 @@
   <h2>Tesco</h2>
   <div class="search-row">
     <div class="search-inline">
-      <input type="text" id="tescoInput" oninput="showSuggestions(this, 'tesco')" autocomplete="off" placeholder="Enter product name">
+      <input type="text" id="tescoInput"
+        onfocus="this.scrollIntoView({ behavior: 'smooth', block: 'center' })"
+        oninput="showSuggestions(this, 'tesco')"
+        autocomplete="off" placeholder="Enter product name">
       <button onclick="search('tesco')">Search</button>
     </div>
     <div id="tescoSuggestions" class="suggestions"></div>
@@ -71,7 +74,10 @@
   <h2>Asda</h2>
   <div class="search-row">
     <div class="search-inline">
-      <input type="text" id="asdaInput" oninput="showSuggestions(this, 'asda')" autocomplete="off" placeholder="Enter product name">
+      <input type="text" id="asdaInput"
+        onfocus="this.scrollIntoView({ behavior: 'smooth', block: 'center' })"
+        oninput="showSuggestions(this, 'asda')"
+        autocomplete="off" placeholder="Enter product name">
       <button onclick="search('asda')">Search</button>
     </div>
     <div id="asdaSuggestions" class="suggestions"></div>
@@ -80,7 +86,10 @@
   <h2>Sainsbury’s</h2>
   <div class="search-row">
     <div class="search-inline">
-      <input type="text" id="sainsburysInput" oninput="showSuggestions(this, 'sainsburys')" autocomplete="off" placeholder="Enter product name">
+      <input type="text" id="sainsburysInput"
+        onfocus="this.scrollIntoView({ behavior: 'smooth', block: 'center' })"
+        oninput="showSuggestions(this, 'sainsburys')"
+        autocomplete="off" placeholder="Enter product name">
       <button onclick="search('sainsburys')">Search</button>
     </div>
     <div id="sainsburysSuggestions" class="suggestions"></div>
@@ -89,7 +98,10 @@
   <h2>Morrisons</h2>
   <div class="search-row">
     <div class="search-inline">
-      <input type="text" id="morrisonsInput" oninput="showSuggestions(this, 'morrisons')" autocomplete="off" placeholder="Enter product name">
+      <input type="text" id="morrisonsInput"
+        onfocus="this.scrollIntoView({ behavior: 'smooth', block: 'center' })"
+        oninput="showSuggestions(this, 'morrisons')"
+        autocomplete="off" placeholder="Enter product name">
       <button onclick="search('morrisons')">Search</button>
     </div>
     <div id="morrisonsSuggestions" class="suggestions"></div>
@@ -125,6 +137,7 @@
     ];
 
     function showSuggestions(input, store) {
+      input.scrollIntoView({ behavior: "smooth", block: "center" });
       const query = input.value.toLowerCase();
       const suggestionBox = document.getElementById(store + "Suggestions");
       suggestionBox.innerHTML = "";
