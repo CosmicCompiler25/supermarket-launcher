@@ -14,20 +14,160 @@
             min-height: 100vh;
             margin: 0;
         }
-        /* ... (rest of the CSS remains the same) ... */
+
+        /* Responsive Container (Takes up less than 50% vertical space on mobile) */
+        .compact-container {
+            width: 95%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding-top: 5vh; /* Keep it high up on the screen */
+            padding-bottom: 20px;
+        }
+        
+        .main-card {
+            background-color: white;
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow-md */
+            border: 2px solid #e5e7eb; /* border-2 border-gray-200 */
+            margin-bottom: 1rem;
+        }
+
+        /* Grid Layout for Inputs (3 columns) */
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px; /* gap-2 */
+        }
+
+        /* Input Styling */
+        .tap-input {
+            height: 48px;
+            padding: 0 12px;
+            text-align: right;
+            font-size: 1.125rem; /* text-lg */
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .tap-input:focus {
+            border-color: #3b82f6; /* focus:border-blue-500 */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* focus:ring-blue-500 equivalent */
+            outline: none;
+        }
+
+        /* Result Box Styling */
+        .result-box {
+            height: 48px;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            font-weight: 700;
+            font-size: 1.125rem;
+            border-radius: 8px;
+            word-break: break-all;
+            /* Default Style applied via JS */
+        }
+
+        /* Dynamic Styles controlled by JavaScript */
+        .default-result {
+            background-color: #e5e7eb; /* bg-gray-200 */
+            color: #1f2937; /* text-gray-800 */
+            box-shadow: none;
+        }
+        
+        .cheapest-result {
+            background-color: #4ade80; /* bg-green-400 */
+            color: #111827; /* text-gray-900 (Dark text on green) */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-md equivalent */
+        }
+
+        /* Utility Styles */
+        .text-center { text-align: center; }
+        .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+        .font-extrabold { font-weight: 800; }
+        .text-gray-800 { color: #1f2937; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-1 { margin-bottom: 0.25rem; }
+        .uppercase { text-transform: uppercase; }
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .font-semibold { font-weight: 600; }
+        .text-gray-500 { color: #6b7280; }
+        .block { display: block; }
+        .mt-1 { margin-top: 0.25rem; }
+        .text-right { text-align: right; }
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+
     </style>
 </head>
 <body>
-    <!-- ... (HTML body remains the same) ... -->
-    <script>
-        // ... (JS functions remain the same) ...
 
-        // --- Service Worker Registration for Offline Access ---
+    <div class="compact-container">
+        <h1 class="text-2xl font-extrabold text-center text-gray-800 mb-6">Unit Price Comparison</h1>
+        
+        <!-- Instruction -->
+        <p class="text-center text-xs text-gray-500 mb-6 px-2">Enter Price and Quantity to calculate the Price Per 100 Units.</p>
+
+        <!-- Product Line 1 -->
+        <div class="main-card">
+            <label class="text-xs font-semibold uppercase text-gray-500 mb-1 block">Item 1</label>
+            <div class="input-grid">
+                <!-- Price 1 Input -->
+                <div>
+                    <!-- inputmode="decimal" ensures the numeric keyboard appears on mobile -->
+                    <input id="price1" type="number" inputmode="decimal" placeholder="Price (£)" oninput="calculateAndCompare()" 
+                           class="tap-input"
+                           aria-label="Price for Item 1">
+                </div>
+                <!-- Quantity 1 Input -->
+                <div>
+                    <input id="quantity1" type="number" inputmode="decimal" placeholder="Qty (g/ml)" oninput="calculateAndCompare()" 
+                           class="tap-input"
+                           aria-label="Quantity for Item 1">
+                </div>
+                <!-- Result 1 Display -->
+                <!-- The JS will initially set this to .default-result -->
+                <div id="result1" class="result-box">
+                    0.000000
+                </div>
+            </div>
+            <p class="mt-1 text-xs text-gray-500 text-right">Price / 100 units</p>
+        </div>
+
+        <!-- Product Line 2 -->
+        <div class="main-card">
+            <label class="text-xs font-semibold uppercase text-gray-500 mb-1 block">Item 2</label>
+            <div class="input-grid">
+                <!-- Price 2 Input -->
+                <div>
+                    <input id="price2" type="number" inputmode="decimal" placeholder="Price (£)" oninput="calculateAndCompare()" 
+                           class="tap-input"
+                           aria-label="Price for Item 2">
+                </div>
+                <!-- Quantity 2 Input -->
+                <div>
+                    <input id="quantity2" type="number" inputmode="decimal" placeholder="Qty (g/ml)" oninput="calculateAndCompare()" 
+                           class="tap-input"
+                           aria-label="Quantity for Item 2">
+                </div>
+                <!-- Result 2 Display -->
+                <!-- The JS will initially set this to .default-result -->
+                <div id="result2" class="result-box">
+                    0.000000
+                </div>
+            </div>
+            <p class="mt-1 text-xs text-gray-500 text-right">Price / 100 units</p>
+        </div>
+    </div>
+    
+    <script>
+        // --- Service Worker Registration for Offline Access (TEMPORARILY DISABLED) ---
+        // We are commenting this out to force the browser to load the main page correctly.
+        /*
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // *** THE FINAL, CRITICAL CHANGE: ***
-                // We are explicitly setting the scope to the current directory (./) 
-                // and ensuring the worker file is referenced correctly.
                 navigator.serviceWorker.register('./worker-v6.js', { scope: './' })
                     .then(registration => {
                         console.log('SW registered:', registration);
@@ -37,10 +177,70 @@
                     });
             });
         }
-        // -----------------------------------------------------
+        */
+        // -----------------------------------------------------------------------------
 
-        // ... (rest of the JS functions) ...
+        // Global utility to safely parse inputs
+        function getFloatValue(id) {
+            const element = document.getElementById(id);
+            // Use parseFloat on the value, falling back to 0 if it's not a valid number
+            return parseFloat(element.value) || 0;
+        }
+
+        // Main calculation and comparison function
+        function calculateAndCompare() {
+            const price1 = getFloatValue('price1');
+            const quantity1 = getFloatValue('quantity1');
+            const price2 = getFloatValue('price2');
+            const quantity2 = getFloatValue('quantity2');
+
+            const resultEl1 = document.getElementById('result1');
+            const resultEl2 = document.getElementById('result2');
+            
+            let ppu1, ppu2;
+            
+            // --- Calculation Logic ---
+            
+            // Calculate Price Per 100 Units: (Price / Quantity) * 100
+            
+            if (price1 > 0 && quantity1 > 0) {
+                ppu1 = (price1 / quantity1) * 100;
+                // Display the result to six decimal places
+                resultEl1.textContent = ppu1.toFixed(6); 
+            } else {
+                ppu1 = Infinity; // Treat invalid/incomplete as very expensive
+                resultEl1.textContent = '0.000000';
+            }
+
+            if (price2 > 0 && quantity2 > 0) {
+                ppu2 = (price2 / quantity2) * 100;
+                // Display the result to six decimal places
+                resultEl2.textContent = ppu2.toFixed(6);
+            } else {
+                ppu2 = Infinity;
+                resultEl2.textContent = '0.000000';
+            }
+
+            // --- Comparison and Highlighting Logic ---
+            
+            // Reset both to default styles
+            resultEl1.className = 'result-box default-result';
+            resultEl2.className = 'result-box default-result';
+
+            // Determine which is cheaper (or if they are equal)
+            if (ppu1 < ppu2) {
+                // Item 1 is cheapest
+                resultEl1.classList.remove('default-result');
+                resultEl1.classList.add('cheapest-result');
+            } else if (ppu2 < ppu1) {
+                // Item 2 is cheapest
+                resultEl2.classList.remove('default-result');
+                resultEl2.classList.add('cheapest-result');
+            } 
+            // If ppu1 === ppu2, they both stay default-result (no green highlight)
+        }
         
+        // Run calculation once on load to set initial styles
         window.onload = function() {
             calculateAndCompare();
         };
@@ -48,16 +248,3 @@
     </script>
 </body>
 </html>
-
----
-
-### Final Clean Installation Steps
-
-Since you've already reinstalled Brave, you just need a clean install of the app itself:
-
-1.  **Commit the Updated HTML** (with the fix above) to your `unit-price-comparison_2.html` file on GitHub.
-2.  **Go Online & Register:** Open the URL in Brave: `https://cosmiccompiler25.github.io/supermarket-launcher/unit-price-comparison_2.html`.
-3.  **Install Shortcut:** Wait 10 seconds, then use the three-dot menu to **"Add to Home Screen."**
-4.  **Test Offline:** Turn off Wi-Fi and mobile data. Open the new home screen shortcut.
-
-This path correction should be the definitive fix for GitHub Pages. Please let me know the result!
