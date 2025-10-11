@@ -3,9 +3,10 @@
 const CACHE_NAME = 'unit-price-comparator-v1';
 
 // List the files that should be cached on installation
-// This MUST include the HTML file you want to use offline.
+// This MUST include the HTML file you want to use offline, AND the Service Worker itself for reliability.
 const urlsToCache = [
     './unit-price-comparison_2.html',
+    './sw.js', // Added the Service Worker file itself
 ];
 
 // Installation: Caches the essential files
