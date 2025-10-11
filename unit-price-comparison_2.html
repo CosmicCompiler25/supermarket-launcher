@@ -166,8 +166,9 @@
         // --- Service Worker Registration for Offline Access ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // IMPORTANT: This now points to the new file name worker-v5.js
-                navigator.serviceWorker.register('worker-v5.js', { scope: './' })
+                // IMPORTANT: Register the NEW Service Worker file name: worker-v6.js
+                // The scope is set to the current directory './'
+                navigator.serviceWorker.register('worker-v6.js', { scope: './' })
                     .then(registration => {
                         console.log('SW registered:', registration);
                     })
@@ -218,35 +219,29 @@
                 ppu2 = Infinity;
                 resultEl2.textContent = '0.000000';
             }
+
+            // --- Comparison and Highlighting Logic ---
             
-            // --- Comparison Logic ---
+            // Reset both to default styles
+            resultEl1.className = 'result-box default-result';
+            resultEl2.className = 'result-box default-result';
 
-            // Reset classes
-            resultEl1.classList.remove('cheapest-result');
-            resultEl1.classList.add('default-result');
-            resultEl2.classList.remove('cheapest-result');
-            resultEl2.classList.add('default-result');
-
-            if (ppu1 !== Infinity || ppu2 !== Infinity) {
-                // If Item 1 is cheaper than Item 2
-                if (ppu1 < ppu2) {
-                    resultEl1.classList.remove('default-result');
-                    resultEl1.classList.add('cheapest-result');
-                } 
-                // If Item 2 is cheaper than Item 1
-                else if (ppu2 < ppu1) {
-                    resultEl2.classList.remove('default-result');
-                    resultEl2.classList.add('cheapest-result');
-                }
-            }
+            // Determine which is cheaper (or if they are equal)
+            if (ppu1 < ppu2) {
+                // Item 1 is cheapest
+                resultEl1.classList.remove('default-result');
+                resultEl1.classList.add('cheapest-result');
+            } else if (ppu2 < ppu1) {
+                // Item 2 is cheapest
+                resultEl2.classList.remove('default-result');
+                resultEl2.classList.add('cheapest-result');
+            } 
+            // If ppu1 === ppu2, they both stay default-result (no green highlight)
         }
         
-        // Initialize the appearance on load
+        // Run calculation once on load to set initial styles
         window.onload = function() {
             calculateAndCompare();
-            // Ensure the initial default state is set
-            document.getElementById('result1').classList.add('default-result');
-            document.getElementById('result2').classList.add('default-result');
         };
 
     </script>
