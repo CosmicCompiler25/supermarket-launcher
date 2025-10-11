@@ -1,6 +1,6 @@
 // Define a cache name specific to this app/version
 // Changing this version number (e.g., to v2) forces the browser to re-cache
-const CACHE_NAME = 'unit-price-comparator-v1';
+const CACHE_NAME = 'unit-price-comparator-v2'; // CHANGED TO V2 TO FORCE UPDATE
 
 // List the files that should be cached on installation
 // This MUST include the HTML file you want to use offline, AND the Service Worker itself for reliability.
