@@ -163,12 +163,10 @@
     </div>
     
     <script>
-        // --- Service Worker Registration for Offline Access (TEMPORARILY DISABLED) ---
-        // We are commenting this out to force the browser to load the main page correctly.
-        /*
+        // --- Service Worker Registration for Offline Access (NOW ENABLED) ---
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                // IMPORTANT: Path change: points up one level (../) to the parent directory (worker-v6.js)
+                // IMPORTANT: Path points up one level (../) to the parent directory (worker-v6.js)
                 navigator.serviceWorker.register('../worker-v6.js', { scope: './' })
                     .then(registration => {
                         console.log('SW registered:', registration);
@@ -178,8 +176,7 @@
                     });
             });
         }
-        */
-        // -----------------------------------------------------------------------------
+        // ---------------------------------------------------------------------
 
         // Global utility to safely parse inputs
         function getFloatValue(id) {
