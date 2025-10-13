@@ -164,85 +164,79 @@
     </div>
     
     <script>
-        // Service Worker registration (expects worker-v6.js in the same folder)
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./worker-v6.js')
-        .then(registration => {
-          console.log('SW registered:', registration);
-        })
-        .catch(registrationError => {
-          console.log('SW registration failed:', registrationError);
+    // --- Service Worker Registration (unchanged) ---
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./worker-v6.js')
+                .then(registration => {
+                    console.log('SW registered:', registration);
+                })
+                .catch(registrationError => {
+                    console.log('SW registration failed:', registrationError);
+                });
         });
-    });
-  }
-        // ---------------------------------------------------------------------
+    }
 
-        // Global utility to safely parse inputs
-        function getFloatValue(id) {
-            const element = document.getElementById(id);
-            // Use parseFloat on the value, falling back to 0 if it's not a valid number
-            return parseFloat(element.value) || 0;
+    // --- Utility to safely parse input values ---
+    function getFloatValue(id) {
+        const element = document.getElementById(id);
+        return parseFloat(element.value) || 0;
+    }
+
+    // --- Main calculation and comparison function ---
+    function calculateAndCompare() {
+        const price1 = getFloatValue('price1');
+        const quantity1 = getFloatValue('quantity1');
+        const price2 = getFloatValue('price2');
+        const quantity2 = getFloatValue('quantity2');
+
+        const resultEl1 = document.getElementById('result1');
+        const resultEl2 = document.getElementById('result2');
+
+        let ppu1, ppu2;
+
+        if (price1 > 0 && quantity1 > 0) {
+            ppu1 = (price1 / quantity1) * 100;
+            resultEl1.textContent = ppu1.toFixed(6);
+        } else {
+            ppu1 = Infinity;
+            resultEl1.textContent = '0.000000';
         }
 
-        // Main calculation and comparison function
-        function calculateAndCompare() {
-            const price1 = getFloatValue('price1');
-            const quantity1 = getFloatValue('quantity1');
-            const price2 = getFloatValue('price2');
-            const quantity2 = getFloatValue('quantity2');
-
-            const resultEl1 = document.getElementById('result1');
-            const resultEl2 = document.getElementById('result2');
-            
-            let ppu1, ppu2;
-            
-            // --- Calculation Logic ---
-            
-            // Calculate Price Per 100 Units: (Price / Quantity) * 100
-            
-            if (price1 > 0 && quantity1 > 0) {
-                ppu1 = (price1 / quantity1) * 100;
-                // Display the result to six decimal places
-                resultEl1.textContent = ppu1.toFixed(6); 
-            } else {
-                ppu1 = Infinity; // Treat invalid/incomplete as very expensive
-                resultEl1.textContent = '0.000000';
-            }
-
-            if (price2 > 0 && quantity2 > 0) {
-                ppu2 = (price2 / quantity2) * 100;
-                // Display the result to six decimal places
-                resultEl2.textContent = ppu2.toFixed(6);
-            } else {
-                ppu2 = Infinity;
-                resultEl2.textContent = '0.000000';
-            }
-
-            // --- Comparison and Highlighting Logic ---
-            
-            // Reset both to default styles
-            resultEl1.className = 'result-box default-result';
-            resultEl2.className = 'result-box default-result';
-
-            // Determine which is cheaper (or if they are equal)
-            if (ppu1 < ppu2) {
-                // Item 1 is cheapest
-                resultEl1.classList.remove('default-result');
-                resultEl1.classList.add('cheapest-result');
-            } else if (ppu2 < ppu1) {
-                // Item 2 is cheapest
-                resultEl2.classList.remove('default-result');
-                resultEl2.classList.add('cheapest-result');
-            } 
-            // If ppu1 === ppu2, they both stay default-result (no green highlight)
+        if (price2 > 0 && quantity2 > 0) {
+            ppu2 = (price2 / quantity2) * 100;
+            resultEl2.textContent = ppu2.toFixed(6);
+        } else {
+            ppu2 = Infinity;
+            resultEl2.textContent = '0.000000';
         }
-        
-        // Run calculation once on load to set initial styles
-        window.onload = function() {
-            calculateAndCompare();
-        };
 
-    </script>
+        // Reset styles
+        resultEl1.className = 'result-box default-result';
+        resultEl2.className = 'result-box default-result';
+
+        // Highlight the cheaper item
+        if (ppu1 < ppu2) {
+            resultEl1.classList.remove('default-result');
+            resultEl1.classList.add('cheapest-result');
+        } else if (ppu2 < ppu1) {
+            resultEl2.classList.remove('default-result');
+            resultEl2.classList.add('cheapest-result');
+        }
+    }
+
+    // --- Run calculation on page load ---
+    window.onload = function() {
+        calculateAndCompare();
+
+        // --- Minimal delayed focus to encourage mobile keyboard ---
+        setTimeout(() => {
+            const input = document.getElementById('price1');
+            if (input) input.focus();
+        }, 200); // 200ms delay usually triggers keyboard on mobile
+    };
+</script>
+
+
 </body>
 </html>
