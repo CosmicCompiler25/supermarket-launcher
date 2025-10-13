@@ -163,19 +163,18 @@
     </div>
     
     <script>
-        // --- Service Worker Registration for Offline Access (NOW ENABLED) ---
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                // IMPORTANT: Path points up one level (../) to the parent directory (worker-v6.js)
-                navigator.serviceWorker.register('../worker-v6.js', { scope: './' })
-                    .then(registration => {
-                        console.log('SW registered:', registration);
-                    })
-                    .catch(registrationError => {
-                        console.log('SW registration failed:', registrationError);
-                    });
-            });
-        }
+        // Service Worker registration (expects worker-v6.js in the same folder)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./worker-v6.js')
+        .then(registration => {
+          console.log('SW registered:', registration);
+        })
+        .catch(registrationError => {
+          console.log('SW registration failed:', registrationError);
+        });
+    });
+  }
         // ---------------------------------------------------------------------
 
         // Global utility to safely parse inputs
